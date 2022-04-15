@@ -7,26 +7,25 @@ export default function TodoList() {
     let todosContext = useContext(todoContext);
     let [isAdd, setAdd] = useState(false);
     let [isEdit, setEdit] = useState(false);
-    let [ind, setInd] = useState(0);
-    let [item, setItem] = useState({title:'', description:''});
+    let [item, setItem] = useState({});
     const addTodo = useCallback((todo) =>{
+        todo.id = Math.floor(( Math.random() * 100 ) + 1 );
         todosContext.dispatch({type:'add',payload:todo});
         setAdd(false);
     },[todosContext]);
 
-    const editTodo = useCallback((index, itm) =>{
+    const editTodo = useCallback((itm) =>{
         setItem(itm);
-        setInd(index);
         setEdit(true);
     },[]);
 
     const updateTodo = useCallback((todo) =>{
-        todosContext.dispatch({type:'update',payload:{item:todo, index:ind}});
+        todosContext.dispatch({type:'update',payload:todo});
         setEdit(false);
-    },[todosContext, ind])
+    },[todosContext])
 
-    const deleteTodo = useCallback((index) =>{
-        todosContext.dispatch({type:'delete', payload:index})
+    const deleteTodo = useCallback((id) =>{
+        todosContext.dispatch({type:'delete', payload:id})
     },[todosContext]);
     
     return ( 
@@ -46,12 +45,12 @@ export default function TodoList() {
                         </thead>
                         <tbody>{todosContext.state.todos.map((item, index)=>{
                             return(                
-                                <tr key={index}>
+                                <tr key={item.id}>
                                 <td>{index + 1}</td>
                                 <td>{item.title}</td>
                                 <td>{item.description}</td>
-                                <td><Button variant='info' onClick={()=>editTodo(index, item)}>Edit</Button></td>
-                                <td><Button variant='danger' onClick={()=>deleteTodo(index)}>Delete</Button></td>
+                                <td><Button variant='info' onClick={()=>editTodo(item)}>Edit</Button></td>
+                                <td><Button variant='danger' onClick={()=>deleteTodo(item.id)}>Delete</Button></td>
                                 </tr>
                             )
                         })}

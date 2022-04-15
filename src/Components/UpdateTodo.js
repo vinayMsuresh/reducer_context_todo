@@ -27,7 +27,7 @@ export default function UpdateTodo({value, onClick}){
                         <Form.Control type="text" defaultValue={value?.description} onChange={(e)=>setDescription(e.target.value)} />
                     </Col>
                 </Form.Group>
-                <Button variant='success' onClick={()=>onClick({title:title, description:description})}>Update todo</Button>
+                <Button variant='success' onClick={()=>onClick({title,description,id:value.id})}>Update todo</Button>
             </Form>
         </Container>
     );

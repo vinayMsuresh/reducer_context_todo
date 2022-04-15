@@ -4,10 +4,16 @@ export function reducer(state, actions){
             todos:[...state.todos, actions.payload]
         }
         case 'delete': return{
-            todos:state.todos.filter((items, ind)=>ind!== actions.payload)
+            todos:state.todos.filter((items)=>items.id !== actions.payload)
         }
-        case 'update': state.todos[actions.payload.index] = actions.payload.item;
-            return state
+        case 'update': return {
+            todos: state.todos.map((items) => {
+                if(items.id === actions.payload.id){
+                    return actions.payload;
+                }
+                return items;
+            })
+        }
         default: return state
     }
 }
